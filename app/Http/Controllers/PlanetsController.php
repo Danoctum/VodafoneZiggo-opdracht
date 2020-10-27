@@ -46,7 +46,8 @@ class PlanetsController extends Controller
      */
     public function show(Planet $planet)
     {
-        //
+        $planet->people = $planet->people()->get();
+        return response()->json($planet);
     }
 
     /**

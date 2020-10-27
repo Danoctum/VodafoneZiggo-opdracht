@@ -28,3 +28,4 @@ Route::get('/species/populate', [SpeciesController::class, 'populate']);
 Route::get('/species/{species}', [SpeciesController::class, 'show']);
 
 Route::get('/planets/populate', [PlanetsController::class, 'populate']);
+Route::get('/planets/{planet}', [PlanetsController::class, 'show']);
