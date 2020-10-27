@@ -37,6 +37,10 @@ class Species extends Model
     }
 
 
+    /**
+     * Violates DRY by doing it in every model, 
+     * but since the URL's of a specific resource might change I chose to keep it specific to the resource.
+     */
     static public function getIdFromUrl($url) {
         $cleanedUrl = substr($url, 0, -1);   //  Remove last / from url.
         $explodedUrl  = explode('/', $cleanedUrl);

@@ -90,17 +90,17 @@ class SpeciesController extends Controller
         do {
             //  Populate paginated result
             foreach($response->results as $responseSpecies) {
-                $species = SpeciesModel::addSpecies($responseSpecies);
+                SpeciesModel::addSpecies($responseSpecies);
                 //  Not populating person_species here since that's already done while populating People.
             }
 
             //  Retrieve next page
             $response = json_decode(file_get_contents($response->next));
-        } while(count($response->results) >= 10);
+        } while($response->next !== null);
 
 
         foreach($response->results as $responseSpecies) {
-            $species = SpeciesModel::addSpecies($responseSpecies);
+            SpeciesModel::addSpecies($responseSpecies);
         }
 
         return response()->json([

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Person;
+use App\Models\Planet;
 use Illuminate\Http\Request;
-use App\Models\Person as PersonModel;
+use App\Models\Planet as PlanetModel;
 
-class PeopleController extends Controller
+class PlanetsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,12 +15,7 @@ class PeopleController extends Controller
      */
     public function index()
     {
-
-        //  Check if people exist
-        //  Get people from API
-        //  Send people back from API.
-
-        return 'test';
+        //
     }
 
     /**
@@ -47,10 +42,10 @@ class PeopleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Person  $person
+     * @param  \App\Models\Planet  $planet
      * @return \Illuminate\Http\Response
      */
-    public function show(Person $person)
+    public function show(Planet $planet)
     {
         //
     }
@@ -58,10 +53,10 @@ class PeopleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Person  $person
+     * @param  \App\Models\Planet  $planet
      * @return \Illuminate\Http\Response
      */
-    public function edit(Person $person)
+    public function edit(Planet $planet)
     {
         //
     }
@@ -70,10 +65,10 @@ class PeopleController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Person  $person
+     * @param  \App\Models\Planet  $planet
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Person $person)
+    public function update(Request $request, Planet $planet)
     {
         //
     }
@@ -81,24 +76,22 @@ class PeopleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Person  $person
+     * @param  \App\Models\Planet  $planet
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Person $person)
+    public function destroy(Planet $planet)
     {
         //
     }
 
     public function populate() {
-        $response = json_decode(file_get_contents(env('SWAPI_BASE_URL') . PersonModel::$endpoint));
+        $response = json_decode(file_get_contents(env('SWAPI_BASE_URL') . PlanetModel::$endpoint));
 
         //  API seems unable to send all people, so a while loop is needed to index all people.
         do {
             //  Populate paginated result
-            foreach($response->results as $responsePerson) {
-                $person = PersonModel::addPerson($responsePerson);
-                //  After person has been saved, add the species entries.
-                PersonModel::addSpecies($person, $responsePerson->species);
+            foreach($response->results as $responsePlanet) {
+                PlanetModel::addPlanet($responsePlanet);
             }
 
             //  Retrieve next page
@@ -106,15 +99,13 @@ class PeopleController extends Controller
         } while($response->next !== null);
 
 
-        //  Add last couple of people.  -> couldn't quite figure out how to do this in the while loop.
-        foreach($response->results as $responsePerson) {
-            $person = PersonModel::addPerson($responsePerson);
-            PersonModel::addSpecies($person, $responsePerson->species);
+        foreach($response->results as $responsePlanet) {
+            PlanetModel::addPlanet($responsePlanet);
         }
 
         //  Add people for the latest request.
         return response()->json([
-            'message' => 'People succesfully populated!',
+            'message' => 'Planets succesfully populated!',
             'success' => 'OK',
         ]);
     }
