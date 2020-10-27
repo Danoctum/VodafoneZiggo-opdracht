@@ -9,15 +9,15 @@ class Person extends Model
 {
     use HasFactory;
 
-    public $endpoint = 'people/';
+    static public $endpoint = 'people/';
 
 
     public function species() {
-        $this->belongsToMany('App\Models\Species');
+        return $this->belongsToMany('App\Models\Species');
     }
 
     public function planet() {
-        $this->hasOne('App\Models\Planet');
+        return $this->hasOne('App\Models\Planet');
     }
 
 }

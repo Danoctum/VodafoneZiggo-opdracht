@@ -13,11 +13,10 @@ class CreatePeopleSpecies extends Migration
      */
     public function up()
     {
-        Schema::create('people_species', function (Blueprint $table) {
+        Schema::create('person_species', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('people_id');
+            $table->foreignId('person_id');
             $table->foreignId('species_id');
-            $table->timestamps();
         });
     }
 
