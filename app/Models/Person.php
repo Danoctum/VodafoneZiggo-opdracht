@@ -22,10 +22,7 @@ class Person extends Model
 
     static public function addPerson($responsePerson) {
         $person = new Person();
-
-        $cleanedPersonUrl = substr($responsePerson->url, 0, -1);   //  Remove last / from url.
-        $explodedPersonUrl  = explode('/', $cleanedPersonUrl);
-        $person->id = (int) end($explodedPersonUrl); //  Get id from url
+        $person->id = Person::getIdFromUrl($responsePerson->url);
         $person->name = $responsePerson->name;
         $person->height = $responsePerson->height;
         $person->mass = $responsePerson->mass;
@@ -34,10 +31,7 @@ class Person extends Model
         $person->eye_color = $responsePerson->eye_color;
         $person->birth_year = $responsePerson->birth_year;
         $person->gender = $responsePerson->gender;
-
-        $cleanedPlanetUrl = substr($responsePerson->homeworld, 0, -1);   //  Remove last / from url.
-        $explodedPlanetUrl  = explode('/', $cleanedPlanetUrl);
-        $person->planet_id = (int) end($explodedPlanetUrl); //  Get id from url
+        $person->planet_id = Person::getIdFromUrl($responsePerson->homeworld); 
         $person->url = $responsePerson->url;
         $person->save();
         return $person;
@@ -45,13 +39,17 @@ class Person extends Model
 
     static public function addSpecies($person, $species) {
         foreach($species as $speciesUrl) {
-            $cleanedSpeciesUrl = substr($speciesUrl, 0, -1);   //  Remove last / from url.
-            $explodedSpeciesUrl  = explode('/', $cleanedSpeciesUrl);
-            $species_id = (int) end($explodedSpeciesUrl);
-            $person->species()->attach($species_id);
+            $person->species()->attach(Person::getIdFromUrl($speciesUrl));
         }
         
         return true;
+    }
+
+
+    static public function getIdFromUrl($url) {
+        $cleanedUrl = substr($url, 0, -1);   //  Remove last / from url.
+        $explodedUrl  = explode('/', $cleanedUrl);
+        return (int) end($explodedUrl); //  Get id from url
     }
 
 }

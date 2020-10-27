@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PeopleController;
+use App\Http\Controllers\SpeciesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +21,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/people/populate', [PeopleController::class, 'populate']);
+Route::get('/species/populate', [SpeciesController::class, 'populate']);

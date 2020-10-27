@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Planet extends Model
 {
     use HasFactory;
-    public $endpoint = 'planets/';
+    static ublic $endpoint = 'planets/';
 
 
     public function people() {
