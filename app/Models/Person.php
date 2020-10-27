@@ -10,7 +10,6 @@ class Person extends Model
     use HasFactory;
 
     static public $endpoint = 'people/';
-    protected $with = ['species', 'planet'];
 
 
     public function species() {

@@ -12,11 +12,11 @@ class Species extends Model
 
 
     public function people() {
-        $this->belongsToMany('App\Models\People');
+        return $this->belongsToMany('App\Models\Person');
     }
 
     public function planet() {
-        $this->hasOne('App\Models\Planet');
+        return $this->belongsTo('App\Models\Planet');
     }
 
     static public function addSpecies($responseSpecies) {

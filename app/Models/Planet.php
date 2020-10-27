@@ -12,7 +12,7 @@ class Planet extends Model
 
 
     public function people() {
-        $this->hasMany('App\Models\Person');
+        return $this->hasMany('App\Models\Person');
     }
 
     static public function addPlanet($responsePlanet) {

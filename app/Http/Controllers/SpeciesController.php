@@ -46,7 +46,10 @@ class SpeciesController extends Controller
      */
     public function show(Species $species)
     {
-        //
+        //  Couldn't use the $with in the species model since $with on Person and Species would create an infinite loop.
+        $species->people = $species->people()->get();
+        $species->planet = $species->planet()->get();
+        return response()->json($species);
     }
 
     /**

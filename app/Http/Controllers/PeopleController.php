@@ -51,6 +51,8 @@ class PeopleController extends Controller
      */
     public function show(Person $person)
     {
+        $person->species = $person->species()->get();
+        $person->planet = $person->planet()->get();
         return response()->json($person);
     }
 

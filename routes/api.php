@@ -25,4 +25,6 @@ Route::get('/people/populate', [PeopleController::class, 'populate']);
 Route::get('/people/{person}', [PeopleController::class, 'show']);
 
 Route::get('/species/populate', [SpeciesController::class, 'populate']);
+Route::get('/species/{species}', [SpeciesController::class, 'show']);
+
 Route::get('/planets/populate', [PlanetsController::class, 'populate']);
