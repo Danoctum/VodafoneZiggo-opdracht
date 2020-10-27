@@ -10,6 +10,7 @@ class Person extends Model
     use HasFactory;
 
     static public $endpoint = 'people/';
+    protected $with = ['species', 'planet'];
 
 
     public function species() {
@@ -17,7 +18,7 @@ class Person extends Model
     }
 
     public function planet() {
-        return $this->hasOne('App\Models\Planet');
+        return $this->belongsTo('App\Models\Planet');
     }
 
     static public function addPerson($responsePerson) {

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Planet;
 use Illuminate\Http\Request;
-use App\Models\Planet as PlanetModel;
 
 class PlanetsController extends Controller
 {
@@ -85,13 +84,13 @@ class PlanetsController extends Controller
     }
 
     public function populate() {
-        $response = json_decode(file_get_contents(env('SWAPI_BASE_URL') . PlanetModel::$endpoint));
+        $response = json_decode(file_get_contents(env('SWAPI_BASE_URL') . Planet::$endpoint));
 
         //  API seems unable to send all people, so a while loop is needed to index all people.
         do {
             //  Populate paginated result
             foreach($response->results as $responsePlanet) {
-                PlanetModel::addPlanet($responsePlanet);
+                Planet::addPlanet($responsePlanet);
             }
 
             //  Retrieve next page
@@ -100,7 +99,7 @@ class PlanetsController extends Controller
 
 
         foreach($response->results as $responsePlanet) {
-            PlanetModel::addPlanet($responsePlanet);
+            Planet::addPlanet($responsePlanet);
         }
 
         //  Add people for the latest request.

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Person;
 use Illuminate\Http\Request;
-use App\Models\Person as PersonModel;
 
 class PeopleController extends Controller
 {
@@ -52,7 +51,7 @@ class PeopleController extends Controller
      */
     public function show(Person $person)
     {
-        //
+        return response()->json($person);
     }
 
     /**
@@ -90,15 +89,15 @@ class PeopleController extends Controller
     }
 
     public function populate() {
-        $response = json_decode(file_get_contents(env('SWAPI_BASE_URL') . PersonModel::$endpoint));
+        $response = json_decode(file_get_contents(env('SWAPI_BASE_URL') . Person::$endpoint));
 
         //  API seems unable to send all people, so a while loop is needed to index all people.
         do {
             //  Populate paginated result
             foreach($response->results as $responsePerson) {
-                $person = PersonModel::addPerson($responsePerson);
+                $person = Person::addPerson($responsePerson);
                 //  After person has been saved, add the species entries.
-                PersonModel::addSpecies($person, $responsePerson->species);
+                Person::addSpecies($person, $responsePerson->species);
             }
 
             //  Retrieve next page
@@ -108,8 +107,8 @@ class PeopleController extends Controller
 
         //  Add last couple of people.  -> couldn't quite figure out how to do this in the while loop.
         foreach($response->results as $responsePerson) {
-            $person = PersonModel::addPerson($responsePerson);
-            PersonModel::addSpecies($person, $responsePerson->species);
+            $person = Person::addPerson($responsePerson);
+            Person::addSpecies($person, $responsePerson->species);
         }
 
         //  Add people for the latest request.

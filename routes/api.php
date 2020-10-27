@@ -22,5 +22,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/people/populate', [PeopleController::class, 'populate']);
+Route::get('/people/{person}', [PeopleController::class, 'show']);
+
 Route::get('/species/populate', [SpeciesController::class, 'populate']);
 Route::get('/planets/populate', [PlanetsController::class, 'populate']);

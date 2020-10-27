@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Species;
 use Illuminate\Http\Request;
-use App\Models\Species as SpeciesModel;
 
 class SpeciesController extends Controller
 {
@@ -85,12 +84,12 @@ class SpeciesController extends Controller
     }
 
     public function populate() {
-        $response = json_decode(file_get_contents(env('SWAPI_BASE_URL') . SpeciesModel::$endpoint));
+        $response = json_decode(file_get_contents(env('SWAPI_BASE_URL') . Species::$endpoint));
 
         do {
             //  Populate paginated result
             foreach($response->results as $responseSpecies) {
-                SpeciesModel::addSpecies($responseSpecies);
+                Species::addSpecies($responseSpecies);
                 //  Not populating person_species here since that's already done while populating People.
             }
 
@@ -100,7 +99,7 @@ class SpeciesController extends Controller
 
 
         foreach($response->results as $responseSpecies) {
-            SpeciesModel::addSpecies($responseSpecies);
+            Species::addSpecies($responseSpecies);
         }
 
         return response()->json([
