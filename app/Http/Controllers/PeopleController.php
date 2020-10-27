@@ -91,50 +91,28 @@ class PeopleController extends Controller
 
     public function populate() {
         $response = json_decode(file_get_contents(env('SWAPI_BASE_URL') . PersonModel::$endpoint));
-        
-        // dd($response->results);
+
         //  API seems unable to send all people, so a while loop is needed to index all people.
-        while($response->next !== null) {
+        do {
             //  Populate paginated result
-            foreach($response->results as $key=>$responsePerson) {
-                $person = new PersonModel();
-
-                $cleanedPersonUrl = substr($responsePerson->url, 0, -1);   //  Remove last / from url.
-                $explodedPersonUrl  = explode('/', $cleanedPersonUrl);
-                $person->id = (int) end($explodedPersonUrl); //  Get id from url
-                $person->name = $responsePerson->name;
-                $person->height = $responsePerson->height;
-                $person->mass = $responsePerson->mass;
-                $person->hair_color = $responsePerson->hair_color;
-                $person->skin_color = $responsePerson->skin_color;
-                $person->eye_color = $responsePerson->eye_color;
-                $person->birth_year = $responsePerson->birth_year;
-                $person->gender = $responsePerson->gender;
-
-                $cleanedPlanetUrl = substr($responsePerson->homeworld, 0, -1);   //  Remove last / from url.
-                $explodedPlanetUrl  = explode('/', $cleanedPlanetUrl);
-                $person->planet_id = (int) end($explodedPlanetUrl); //  Get id from url
-                $person->url = $responsePerson->url;
-                $saveSucceeded = $person->save();
-
+            foreach($response->results as $responsePerson) {
+                $person = PersonModel::addPerson($responsePerson);
                 //  After person has been saved, add the species entries.
-                if($saveSucceeded) {
-                    foreach($responsePerson->species as $speciesUrl) {
-                        $cleanedSpeciesUrl = substr($speciesUrl, 0, -1);   //  Remove last / from url.
-                        $explodedSpeciesUrl  = explode('/', $cleanedSpeciesUrl);
-                        $species_id = (int) end($explodedSpeciesUrl);
-                        $person->species()->attach($species_id);
-                    }
-                }
-
+                PersonModel::addSpecies($person, $responsePerson->species);
             }
 
             //  Retrieve next page
             $response = json_decode(file_get_contents($response->next));
-        };
+        } while(count($response->results) >= 10);
 
-        
 
+        //  Add last couple of people.  -> couldn't quite figure out how to do this in the while loop.
+        foreach($response->results as $responsePerson) {
+            $person = PersonModel::addPerson($responsePerson);
+            PersonModel::addSpecies($person, $responsePerson->species);
+        }
+
+        //  Add people for the latest request.
         return 'People successfully populated!';
     }
 }
